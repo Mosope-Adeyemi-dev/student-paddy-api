@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
   });
 });
 
+//Database Configuration
 mongoose.connect(
   process.env.MONGODB_URI,
   {
