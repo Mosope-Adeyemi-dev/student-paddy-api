@@ -1,5 +1,16 @@
-const { userSignupValidation } = require("../services/validation");
-const { createUser } = require("../services/userServices");
+const {
+  userSignupValidation,
+  userLoginValidation,
+  verifyEmailVerification,
+} = require("../services/validation");
+const {
+  createUser,
+  findUserByEmail,
+  validatePassword,
+  verifyEmail,
+  signJwt,
+} = require("../services/userAuthServices");
+const { encrypt, decrypt } = require("../services/encryptDecrypt");
 const { responseHandler } = require("../services/responseHandler");
 
 const userSignup = async (req, res) => {
@@ -9,13 +20,63 @@ const userSignup = async (req, res) => {
     return responseHandler(res, allErrors, 400, false, "");
   }
   const check = await createUser(req.body);
-  console.log(check, "check is here");
   if (check[0]) {
+    const { email } = check[2];
+    const encryptedId = encrypt(email);
+    let hashedId = encryptedId.iv.concat(encryptedId.content);
+    await createMail(email, hashedId, "signup");
     return responseHandler(res, "Signup succesful", 201, false, check[1]);
   }
-  return responseHandler(res, "Signup failed", 400, true, check[1]);
+  return responseHandler(res, "Signup failed", 400, true, "");
 };
 
+const userlogin = async (req, res) => {
+  const { details } = await userLoginValidation(req.body);
+  if (details) {
+    let allErrors = details.map((detail) => detail.message.replace(/"/g, ""));
+    return responseHandler(res, allErrors, 400, true, "");
+  }
+  const foundUser = await findUserByEmail(email);
+  if (!foundUser) {
+    return responseHandler(
+      res,
+      "Email or Password is incorrect",
+      400,
+      true,
+      ""
+    );
+  }
+  if (validatePassword(password, foundUser.password)) {
+    return responseHandler(
+      res,
+      "Login succesful",
+      200,
+      false,
+      signJwt(foundUser._id)
+    );
+  }
+  return responseHandler(res, "Email or Password is incorrect", 400, true, "");
+};
+
+const verifyAccount = async (req, res) => {
+  const { details } = await verifyEmailVerification(req.body);
+  if (details) {
+    let allErrors = details.map((detail) => detail.message.replace(/"/g, ""));
+    return responseHandler(res, allErrors, 400, false, "");
+  }
+  const { id } = req.body;
+  let decrypted = decrypt({
+    iv: id.substring(0, 32),
+    content: id.substring(32, req.params.id.length),
+  });
+  if (await verifyEmail(decrypted)) {
+    return responseHandler(res, "User email verified", 200, false, "");
+  } else {
+    return responseHandler(res, "Unable to verify user email", 400, true, "");
+  }
+};
 module.exports = {
   userSignup,
+  userlogin,
+  verifyAccount,
 };

@@ -46,6 +46,18 @@ const userLoginValidation = async (field) => {
   }
 };
 
+const verifyEmailVerification = async (field) => {
+  const schema = Joi.object({
+    id: Joi.string().required(),
+  });
+
+  try {
+    return await schema.validateAsync(field, { abortEarly: false });
+  } catch (err) {
+    return err;
+  }
+};
+
 //User forgot password validation rules
 const userforgotPasswordValidation = async (field) => {
   const schema = Joi.object({
@@ -78,4 +90,5 @@ module.exports = {
   userforgotPasswordValidation,
   userResetPasswordValidation,
   userSetProfileValidation,
+  verifyEmailVerification,
 };

@@ -9,6 +9,7 @@ const userSchema = new Schema(
     password: { type: String, required: true, min: 8, max: 1024 },
     country: { type: String, required: true, trim: true },
     isVerfied: { type: Boolean, default: false },
+    privacySetting: Object,
     bio: String,
     photo: String,
     coverPhoto: String,
@@ -18,7 +19,7 @@ const userSchema = new Schema(
     department: String,
     academicStatus: {
       type: String,
-      enum: ["undergraduate", "Graduate", "Post-graduate"],
+      enum: ["Undergraduate", "Graduate", "Post-graduate"],
     },
     graduationYear: Date,
   },
