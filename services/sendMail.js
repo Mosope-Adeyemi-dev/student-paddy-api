@@ -36,7 +36,7 @@ const createMail = async (email, id, type) => {
   switch (type) {
     case "signup":
       message = {
-        from: "Eventis <hello.eventis@gmail.com>",
+        from: "Student Paddy",
         to: email,
         subject: "Account verification",
         html: `
@@ -47,12 +47,12 @@ const createMail = async (email, id, type) => {
       break;
     case "resetPassword":
       message = {
-        from: "Eventis <hello.eventis@gmail.com>",
+        from: "Student Paddy",
         to: email,
         subject: "Reset your user Password",
         html: `
     <p> Please click on this link to complete your password reset process</p>
-    <a href="${getUrl()}user/profile/resetpassword/${id}"> Click here to reset your password</a>
+    <a href="${getUrl()}user/profile/resetpassword/${id}">Click here</a> to reset your password
     `,
       };
       break;

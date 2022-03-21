@@ -57,6 +57,11 @@ const checkJwt = async (jwtID) => {
 
 const getUserByID = async (id) => await User.findById(id);
 
+const getUrl = async () =>
+  process.env.MODE === "local"
+    ? "https://localhost:5000"
+    : "https://student-paddy-api.herokuapp.com/api/v1/";
+
 module.exports = {
   createUser,
   validatePassword,
@@ -66,4 +71,5 @@ module.exports = {
   verifyEmail,
   findUserByEmail,
   signJwt,
+  getUrl,
 };
