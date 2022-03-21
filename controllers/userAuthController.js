@@ -9,7 +9,8 @@ const {
   validatePassword,
   verifyEmail,
   signJwt,
-} = require("../services/userAuthServices");
+} = require("../services/userServices");
+const { createMail } = require("../services/sendMail");
 const { encrypt, decrypt } = require("../services/encryptDecrypt");
 const { responseHandler } = require("../services/responseHandler");
 
@@ -25,9 +26,15 @@ const userSignup = async (req, res) => {
     const encryptedId = encrypt(email);
     let hashedId = encryptedId.iv.concat(encryptedId.content);
     await createMail(email, hashedId, "signup");
-    return responseHandler(res, "Signup succesful", 201, false, check[1]);
+    return responseHandler(
+      res,
+      "Your verification email has been sent",
+      201,
+      false,
+      ""
+    );
   }
-  return responseHandler(res, "Signup failed", 400, true, "");
+  return responseHandler(res, check[1], 400, true, "");
 };
 
 const userlogin = async (req, res) => {

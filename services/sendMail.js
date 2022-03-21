@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
-const { getUrl } = require("./userService");
+const { getUrl } = require("./userServices");
 
 const NODEMAILER_EMAIL = process.env.NODEMAILER_EMAIL;
 const REDIRECT_URI = "https://developers.google.com/oauthplayground";
@@ -16,7 +16,7 @@ const oAuth2Client = new google.auth.OAuth2(
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 //Nodemailer Email Service
-const createMail = async (email, firstName, id, type) => {
+const createMail = async (email, id, type) => {
   const accessToken = await oAuth2Client.getAccessToken();
 
   let transporter = nodemailer.createTransport({
@@ -40,7 +40,6 @@ const createMail = async (email, firstName, id, type) => {
         to: email,
         subject: "Account verification",
         html: `
-        <h3> Hi, ${firstName}</h3>
     <p>Welcome to student paddy, Please click on this link to verify your email</p>
     <a href="${getUrl()}/user/auth/verify-account/${id}">Verify Now</a>
     `,
@@ -52,7 +51,6 @@ const createMail = async (email, firstName, id, type) => {
         to: email,
         subject: "Reset your user Password",
         html: `
-    <h3> Hi, ${firstName}</h3>
     <p> Please click on this link to complete your password reset process</p>
     <a href="${getUrl()}user/profile/resetpassword/${id}"> Click here to reset your password</a>
     `,
