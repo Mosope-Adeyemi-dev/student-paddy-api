@@ -25,7 +25,8 @@ const hashedPassword = async (password) => {
   return await bcrypt.hash(password, salt);
 };
 
-const findUserByEmail = async (email) => await User.findOne({ email });
+const getEmailOrUsername = async (email) =>
+  (await User.findOne({ email })) || (await User.findOne({ username }));
 
 const signJwt = (id) => {
   const token = jwt.sign({ id }, process.env.SIGNED_SECRET, {
@@ -59,7 +60,7 @@ const getUserByID = async (id) => await User.findById(id);
 
 const getUrl = async () =>
   process.env.MODE === "local"
-    ? "https://localhost:5000"
+    ? "http://localhost:5000/"
     : "https://student-paddy-api.herokuapp.com/api/v1/";
 
 module.exports = {
@@ -69,7 +70,7 @@ module.exports = {
   checkJwt,
   updatePassword,
   verifyEmail,
-  findUserByEmail,
+  getEmailOrUsername,
   signJwt,
   getUrl,
 };

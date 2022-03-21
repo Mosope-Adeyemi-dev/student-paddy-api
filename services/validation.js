@@ -35,7 +35,7 @@ const userSetProfileValidation = async (field) => {
 //User login validation rules
 const userLoginValidation = async (field) => {
   const schema = Joi.object({
-    email: Joi.string().email().required(),
+    emailOrUsername: Joi.string().required(),
     password: Joi.string().required().min(8).max(1024),
   });
 

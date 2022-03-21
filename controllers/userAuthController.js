@@ -5,7 +5,7 @@ const {
 } = require("../services/validation");
 const {
   createUser,
-  findUserByEmail,
+  getEmailOrUsername,
   validatePassword,
   verifyEmail,
   signJwt,
@@ -38,12 +38,13 @@ const userSignup = async (req, res) => {
 };
 
 const userlogin = async (req, res) => {
+  const { emailOrUsername, password } = req.body;
   const { details } = await userLoginValidation(req.body);
   if (details) {
     let allErrors = details.map((detail) => detail.message.replace(/"/g, ""));
     return responseHandler(res, allErrors, 400, true, "");
   }
-  const foundUser = await findUserByEmail(email);
+  const foundUser = await getEmailOrUsername(emailOrUsername);
   if (!foundUser) {
     return responseHandler(
       res,
