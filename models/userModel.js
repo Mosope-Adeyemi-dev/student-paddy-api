@@ -21,10 +21,9 @@ const userSchema = new Schema(
       type: String,
       enum: ["Undergraduate", "Graduate", "Post-graduate"],
     },
-    graduationYear: Date,
+    graduationYear: String,
   },
   { timestamps: true }
 );
-
 const User = mongoose.model("user", userSchema);
 module.exports = User;

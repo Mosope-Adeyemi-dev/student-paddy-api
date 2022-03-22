@@ -18,12 +18,17 @@ const userSignupValidation = async (field) => {
 //User set profile validation rules
 const userSetProfileValidation = async (field) => {
   const schema = Joi.object({
-    firstname: Joi.string().required(),
-    lastname: Joi.string().required(),
-    username: Joi.string().alphanum().required(),
-    password: Joi.string().required().min(8).max(1024),
-    academicStatus: Joi.string().required(),
-    university: Joi.string().required(),
+    firstname: Joi.string(),
+    lastname: Joi.string(),
+    username: Joi.string().alphanum(),
+    password: Joi.string().min(8).max(1024),
+    academicStatus: Joi.string(),
+    university: Joi.string(),
+    skills: Joi.array(),
+    faculty: Joi.string(),
+    department: Joi.string(),
+    graduationYear: Joi.string(),
+    bio: Joi.string(),
   });
   try {
     return await schema.validateAsync(field, { abortEarly: false });
@@ -75,7 +80,7 @@ const userResetPasswordValidation = async (field) => {
   const schema = Joi.object({
     password: Joi.string().required().min(8).max(1024),
     confirmPassword: Joi.string().required().min(8).max(1024),
-    id: Joi.string().required().min(64),
+    id: Joi.string().required(),
   });
   try {
     return await schema.validateAsync(field, { abortEarly: false });

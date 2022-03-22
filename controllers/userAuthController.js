@@ -38,12 +38,12 @@ const userSignup = async (req, res) => {
 };
 
 const userlogin = async (req, res) => {
-  const { emailOrUsername, password } = req.body;
   const { details } = await userLoginValidation(req.body);
   if (details) {
     let allErrors = details.map((detail) => detail.message.replace(/"/g, ""));
     return responseHandler(res, allErrors, 400, true, "");
   }
+  const { emailOrUsername, password } = req.body;
   const foundUser = await getEmailOrUsername(emailOrUsername);
   if (!foundUser) {
     return responseHandler(
@@ -54,7 +54,9 @@ const userlogin = async (req, res) => {
       ""
     );
   }
-  if (validatePassword(password, foundUser.password)) {
+  const check = await validatePassword(password, foundUser.password);
+  console.log(check);
+  if (check[0] === true) {
     return responseHandler(
       res,
       "Login succesful",
@@ -75,7 +77,7 @@ const verifyAccount = async (req, res) => {
   const { id } = req.body;
   let decrypted = decrypt({
     iv: id.substring(0, 32),
-    content: id.substring(32, req.params.id.length),
+    content: id.substring(32, id.length),
   });
   if (await verifyEmail(decrypted)) {
     return responseHandler(res, "User email verified", 200, false, "");
@@ -83,6 +85,7 @@ const verifyAccount = async (req, res) => {
     return responseHandler(res, "Unable to verify user email", 400, true, "");
   }
 };
+
 module.exports = {
   userSignup,
   userlogin,

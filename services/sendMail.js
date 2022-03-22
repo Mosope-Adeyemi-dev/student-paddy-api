@@ -41,7 +41,7 @@ const createMail = async (email, id, type) => {
         subject: "Account verification",
         html: `
     <p>Welcome to student paddy, Please click on this link to verify your email</p>
-    <a href="${getUrl()}/user/auth/verify-account/${id}">Verify Now</a>
+     <a href="${getUrl()}user/auth/verify-account/${id}">Verify Now</a>
     `,
       };
       break;
@@ -52,7 +52,7 @@ const createMail = async (email, id, type) => {
         subject: "Reset your user Password",
         html: `
     <p> Please click on this link to complete your password reset process</p>
-    <a href="${getUrl()}user/profile/resetpassword/${id}">Click here</a> to reset your password
+    <a href="${getUrl()}user/profile/reset-password/${id}">Click here</a> to reset your password
     `,
       };
       break;
