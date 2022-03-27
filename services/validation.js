@@ -115,6 +115,30 @@ const followTopicValidation = async (field) => {
   }
 };
 
+const createCommunityValidation = async (field) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  try {
+    return await schema.validateAsync(field, { abortEarly: false });
+  } catch (err) {
+    return err;
+  }
+};
+
+const followCommunityValidation = async (field) => {
+  const schema = Joi.object({
+    userId: Joi.string().required(),
+    communityId: Joi.string().required(),
+  });
+  try {
+    return await schema.validateAsync(field, { abortEarly: false });
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports = {
   userSignupValidation,
   userLoginValidation,
@@ -124,4 +148,6 @@ module.exports = {
   verifyEmailVerification,
   createTopicValidation,
   followTopicValidation,
+  createCommunityValidation,
+  followCommunityValidation,
 };

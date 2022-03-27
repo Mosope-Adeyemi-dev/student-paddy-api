@@ -1,4 +1,5 @@
 const Topic = require("../models/topicModel");
+const Community = require("../models/communityModel");
 const TopicFollowers = require("../models/topicFollows");
 const { translateError } = require("../services/mongo_helper");
 
@@ -9,6 +10,20 @@ const setTopic = async ({ name }) => {
     });
     if (await newTopic.save()) {
       return [true, newTopic];
+    }
+  } catch (error) {
+    return [false, translateError(error)];
+  }
+};
+
+const setCommunity = async ({ name, description }) => {
+  try {
+    let newCommunity = Community({
+      name,
+      description,
+    });
+    if (await newCommunity.save()) {
+      return [true, newCommunity];
     }
   } catch (error) {
     return [false, translateError(error)];
@@ -49,6 +64,7 @@ const isUserFollowingTopic = async (topicId, userId) =>
 
 module.exports = {
   setTopic,
+  setCommunity,
   updateTopicFollowers,
   checkTopic,
   isUserFollowingTopic,
