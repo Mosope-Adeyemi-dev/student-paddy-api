@@ -96,6 +96,14 @@ const getUserByID = async (id) => {
   }
 };
 
+const scaledPicture = (pic) =>
+  pic.replace("/upload", "/upload/c_scale,h_200,q_auto:best,w_200");
+
+const updateUserImages = async (type, picture, id) =>
+  type === "photo"
+    ? await User.findByIdAndUpdate(id, { photo: picture }, { new: true })
+    : await User.findByIdAndUpdate(id, { coverPhoto: picture }, { new: true });
+
 const getUrl = () =>
   process.env.MODE == "local"
     ? "http://localhost:5000/"
@@ -112,4 +120,6 @@ module.exports = {
   updateUserDetails,
   signJwt,
   getUrl,
+  updateUserImages,
+  scaledPicture,
 };

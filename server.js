@@ -33,6 +33,7 @@ mongoose.connect(
 //routes
 app.use("/api/v1/user/auth/", require("./routes/userAuthRoute"));
 app.use("/api/v1/user/profile/", require("./routes/userProfileRoute"));
+app.use("/api/v1/topic/", require("./routes/topicRoute"));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

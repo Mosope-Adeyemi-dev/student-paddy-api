@@ -89,6 +89,32 @@ const userResetPasswordValidation = async (field) => {
   }
 };
 
+//Create topic (temp)
+const createTopicValidation = async (field) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    communityId: Joi.string(),
+  });
+  try {
+    return await schema.validateAsync(field, { abortEarly: false });
+  } catch (err) {
+    return err;
+  }
+};
+
+//Follow topic
+const followTopicValidation = async (field) => {
+  const schema = Joi.object({
+    userId: Joi.string().required(),
+    topicId: Joi.string().required(),
+  });
+  try {
+    return await schema.validateAsync(field, { abortEarly: false });
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports = {
   userSignupValidation,
   userLoginValidation,
@@ -96,4 +122,6 @@ module.exports = {
   userResetPasswordValidation,
   userSetProfileValidation,
   verifyEmailVerification,
+  createTopicValidation,
+  followTopicValidation,
 };

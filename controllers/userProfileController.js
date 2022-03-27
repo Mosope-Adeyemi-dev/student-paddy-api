@@ -4,6 +4,8 @@ const {
   updateUserDetails,
   getEmailOrUsername,
   updatePassword,
+  scaledPicture,
+  updateUserImages,
   getUserByID,
 } = require("../services/userServices");
 const {
@@ -13,6 +15,7 @@ const {
 } = require("../services/validation");
 const { createMail } = require("../services/sendMail");
 const { encrypt, decrypt } = require("../services/encryptDecrypt");
+const cloudinary = require("cloudinary").v2;
 
 const userProfileUpdate = async (req, res) => {
   const { details } = await userSetProfileValidation(req.body);
@@ -45,7 +48,7 @@ const userForgotPassword = async (req, res) => {
       res,
       "Reset password email has been sent",
       200,
-      true,
+      false,
       ""
     );
   }
@@ -100,9 +103,38 @@ const getUserDetails = async (req, res) => {
   return responseHandler(res, check[1], 400, true, "");
 };
 
+const profileImageUpload = async (req, res) => {
+  if (req.file == undefined) {
+    return responseHandler(res, "Include an image to upload", 400, true, "");
+  }
+
+  const { imageType } = req.params;
+  const { id } = req.body;
+
+  if (imageType != "photo" && imageType != "coverphoto") {
+    return responseHandler(res, "Include a valid image type", 400, true, "");
+  }
+  const avatar = req.file.path;
+  const updatedProfile = await updateUserImages(imageType, avatar, id);
+
+  if (updatedProfile) {
+    return responseHandler(res, `image uploaded successfully`, 200, false, {
+      imageUrl: avatar,
+    });
+  }
+  return responseHandler(
+    res,
+    "An error occured, image upload failed",
+    400,
+    true,
+    ""
+  );
+};
+
 module.exports = {
   userProfileUpdate,
   userResetPassword,
   userForgotPassword,
   getUserDetails,
+  profileImageUpload,
 };
