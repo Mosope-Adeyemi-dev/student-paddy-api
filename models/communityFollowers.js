@@ -13,7 +13,7 @@ const communityFollowersSchema = new Schema(
 );
 
 const CommunityFollowers = mongoose.model(
-  "community",
+  "communityFollowers",
   communityFollowersSchema
 );
 module.exports = CommunityFollowers;

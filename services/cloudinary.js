@@ -11,7 +11,7 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "student-paddy",
-    allowedFormats: ["jpeg", "png", "jpg"],
+    allowedFormats: ["jpeg", "png", "jpg", "pdf"],
   },
 });
 

@@ -35,6 +35,7 @@ app.use("/api/v1/user/auth/", require("./routes/userAuthRoute"));
 app.use("/api/v1/user/profile/", require("./routes/userProfileRoute"));
 app.use("/api/v1/topic/", require("./routes/topicRoute"));
 app.use("/api/v1/community/", require("./routes/communityRoute"));
+app.use("/api/v1/post/", require("./routes/postRoute"));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -93,7 +93,26 @@ const userResetPasswordValidation = async (field) => {
 const createTopicValidation = async (field) => {
   const schema = Joi.object({
     name: Joi.string().required(),
-    communityId: Joi.string(),
+    communityId: Joi.string().required(),
+  });
+  try {
+    return await schema.validateAsync(field, { abortEarly: false });
+  } catch (err) {
+    return err;
+  }
+};
+
+//Create post (temp)
+const createPostValidation = async (field) => {
+  const schema = Joi.object({
+    topicId: Joi.string().required().alphanum(),
+    topic: Joi.string().required(),
+    postContent: Joi.required(),
+    caption: Joi.string(),
+    communityId: Joi.string().required().alphanum(),
+    communityName: Joi.string().required(),
+    postCreator: Joi.string().required().alphanum(),
+    parentPostId: Joi.string(),
   });
   try {
     return await schema.validateAsync(field, { abortEarly: false });
@@ -150,4 +169,5 @@ module.exports = {
   followTopicValidation,
   createCommunityValidation,
   followCommunityValidation,
+  createPostValidation,
 };

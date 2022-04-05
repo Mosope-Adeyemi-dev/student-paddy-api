@@ -3,10 +3,11 @@ const Community = require("../models/communityModel");
 const TopicFollowers = require("../models/topicFollows");
 const { translateError } = require("../services/mongo_helper");
 
-const setTopic = async ({ name }) => {
+const setTopic = async ({ name, communityId }) => {
   try {
     let newTopic = Topic({
       name,
+      communityId,
     });
     if (await newTopic.save()) {
       return [true, newTopic];
