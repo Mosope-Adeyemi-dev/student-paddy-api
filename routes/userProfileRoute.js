@@ -5,12 +5,14 @@ const {
   userResetPassword,
   getUserDetails,
   profileImageUpload,
+  deleteUser,
 } = require("../controllers/userProfileController");
 const { verifyToken } = require("../middlewares/authMiddleware");
 const multer = require("multer");
 const { storage } = require("../services/cloudinary");
 const upload = multer({ storage });
 
+router.delete("/:id", verifyToken, deleteUser);
 router.patch("/update", verifyToken, userProfileUpdate);
 router.post("/forgot-password", userForgotPassword);
 router.put("/reset-password", userResetPassword);

@@ -22,6 +22,7 @@ const userSchema = new Schema(
       enum: ["Undergraduate", "Graduate", "Post-graduate"],
     },
     graduationYear: String,
+    deletedAccount: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

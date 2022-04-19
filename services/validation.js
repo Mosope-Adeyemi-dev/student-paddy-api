@@ -107,12 +107,13 @@ const createPostValidation = async (field) => {
   const schema = Joi.object({
     topicId: Joi.string().required().alphanum(),
     topic: Joi.string().required(),
-    postContent: Joi.required(),
+    postContent: Joi.required().allow(""),
     caption: Joi.string(),
     communityId: Joi.string().required().alphanum(),
     communityName: Joi.string().required(),
     postCreator: Joi.string().required().alphanum(),
     parentPostId: Joi.string(),
+    title: Joi.string(),
   });
   try {
     return await schema.validateAsync(field, { abortEarly: false });

@@ -45,7 +45,7 @@ const userlogin = async (req, res) => {
   }
   const { emailOrUsername, password } = req.body;
   const foundUser = await getEmailOrUsername(emailOrUsername);
-  if (!foundUser) {
+  if (!foundUser || foundUser.deletedAccount == true) {
     return responseHandler(
       res,
       "Email or Password is incorrect",
@@ -57,13 +57,10 @@ const userlogin = async (req, res) => {
   const check = await validatePassword(password, foundUser.password);
   console.log(check);
   if (check[0] === true) {
-    return responseHandler(
-      res,
-      "Login succesful",
-      200,
-      false,
-      signJwt(foundUser._id)
-    );
+    return responseHandler(res, "Login succesful", 200, false, {
+      token: signJwt(foundUser._id),
+      userId: foundUser._id,
+    });
   }
   return responseHandler(res, "Email or Password is incorrect", 400, true, "");
 };

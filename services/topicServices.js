@@ -60,8 +60,23 @@ const updateTopicFollowers = async ({ topicId, userId }) => {
 
 const checkTopic = async (topicId) => await Topic.findById(topicId);
 
+const searchTopic = async (key) =>
+  (await Topic.find({ name: { $regex: `${key}` } })) ||
+  (await Topic.find({
+    name: { $regex: `${key.charAt(0).toUpperCase() + key.slice(1)}` },
+  }));
+
 const isUserFollowingTopic = async (topicId, userId) =>
   await TopicFollowers.findOne({ topicId, userId });
+
+const getTopicsByCommunityId = async (id) => {
+  try {
+    const result = await Topic.find({ communityId: id });
+    return [true, result];
+  } catch (error) {
+    return [false, translateError(error)];
+  }
+};
 
 module.exports = {
   setTopic,
@@ -69,4 +84,6 @@ module.exports = {
   updateTopicFollowers,
   checkTopic,
   isUserFollowingTopic,
+  searchTopic,
+  getTopicsByCommunityId,
 };

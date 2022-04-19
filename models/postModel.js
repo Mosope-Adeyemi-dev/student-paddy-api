@@ -19,6 +19,7 @@ const postSchema = new Schema(
     parentPostId: { type: Schema.Types.ObjectId, ref: "Post" },
     numberOfReposts: Number,
     caption: String,
+    title: String,
   },
   {
     timestamps: true,

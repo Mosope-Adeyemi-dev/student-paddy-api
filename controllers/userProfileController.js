@@ -4,9 +4,9 @@ const {
   updateUserDetails,
   getEmailOrUsername,
   updatePassword,
-  scaledPicture,
   updateUserImages,
   getUserByID,
+  changeAccountState,
 } = require("../services/userServices");
 const {
   userSetProfileValidation,
@@ -15,7 +15,6 @@ const {
 } = require("../services/validation");
 const { createMail } = require("../services/sendMail");
 const { encrypt, decrypt } = require("../services/encryptDecrypt");
-const cloudinary = require("cloudinary").v2;
 
 const userProfileUpdate = async (req, res) => {
   const { details } = await userSetProfileValidation(req.body);
@@ -131,10 +130,28 @@ const profileImageUpload = async (req, res) => {
   );
 };
 
+const deleteUser = async (req, res) => {
+  if (req.params.id == undefined)
+    return responseHandler(res, "Include a valid user id", 400, true, "");
+
+  const { id } = req.params;
+  const result = await changeAccountState(id);
+  if (result)
+    return responseHandler(
+      res,
+      "User account deleted succesfully",
+      204,
+      false,
+      ""
+    );
+  return responseHandler(res, "Unable to delete user account", 400, true, "");
+};
+
 module.exports = {
   userProfileUpdate,
   userResetPassword,
   userForgotPassword,
   getUserDetails,
   profileImageUpload,
+  deleteUser,
 };

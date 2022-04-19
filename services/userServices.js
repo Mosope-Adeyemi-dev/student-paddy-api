@@ -48,7 +48,7 @@ const signJwt = (id) => {
   const token = jwt.sign({ id }, process.env.SIGNED_SECRET, {
     expiresIn: 60 * 60 * 24 * 30,
   });
-  return { token };
+  return token;
 };
 
 const validatePassword = async (formPassword, dbPassword) => {
@@ -81,6 +81,9 @@ const checkJwt = async (jwtID) => {
     return { err: error.message };
   }
 };
+
+const changeAccountState = async (id) =>
+  await User.findOneAndUpdate({ id }, { deletedAccount: true }, { new: true });
 
 const getUserByID = async (id) => {
   try {
@@ -122,4 +125,5 @@ module.exports = {
   getUrl,
   updateUserImages,
   scaledPicture,
+  changeAccountState,
 };
